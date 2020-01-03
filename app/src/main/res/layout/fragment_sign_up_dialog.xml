@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/cardView1"
+            app:cardCornerRadius="40dp"
+            android:layout_marginBottom="20dp">
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@color/colorPrimary"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"
+                android:padding="10dp"
+                android:src="@drawable/ic_add_a_photo_black_24dp"
+                android:id="@+id/signUpUserImageBtn"/>
+        </androidx.cardview.widget.CardView>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_email_black_24dp"
+            android:id="@+id/mailIv"
+            android:layout_below="@id/cardView1"
+            android:layout_marginTop="30dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/mailIv"
+            android:layout_toEndOf="@+id/mailIv">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/Email"
+                android:id="@+id/signUpFragmentEmail"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_person_black_24dp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/mailIv"
+            android:id="@+id/userIv"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/userIv"
+            android:layout_alignBottom="@id/userIv">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/Username"
+                android:id="@+id/signUpFragmentUsername"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock_black_24dp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/userIv"
+            android:id="@+id/lockIv"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/lockIv"
+            android:layout_alignBottom="@id/lockIv">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/Password"
+                android:inputType="textPassword"
+                android:id="@+id/signUpFragmentPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            app:strokeColor="@color/textColor_black"
+            app:strokeWidth="2dp"
+            android:backgroundTintMode="screen"
+            app:cornerRadius="8dp"
+            android:layout_below="@+id/lockIv"
+            android:text="@string/SignUp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/signUpBtn"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

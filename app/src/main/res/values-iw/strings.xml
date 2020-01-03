@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TRADEAL</string>
+    <string name="EditProfile">ערוך את פרופיל המשתמש שלך</string>
+    <string name="signOut">התנתק</string>
+    <string name="Password">סיסמה</string>
+    <string name="Email">מייל</string>
+    <string name="SignIn">התחבר</string>
+    <string name="SignUp">הרשם</string>
+    <string name="Username">שם משתמש</string>
+    <string name="Search">חפש</string>
+    <string name="SearchHint">חפש בטריידיל</string>
+    <string name="Welcome">Welcome,</string>
+</resources>

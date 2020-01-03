@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "106982393628",
+    "firebase_url": "https://tradeal-8f404.firebaseio.com",
+    "project_id": "tradeal-8f404",
+    "storage_bucket": "tradeal-8f404.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106982393628:android:6fb581217aa47b19929cd9",
+        "android_client_info": {
+          "package_name": "com.example.tradeal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106982393628-lv15umlqa5rasoc84uuhonpbfd5ceqes.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tradeal",
+            "certificate_hash": "656639bf3430f0a70717eab14c42556e795e4299"
+          }
+        },
+        {
+          "client_id": "106982393628-kf7ldv94epd67bnig1g62l8gpc3rv4mb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tradeal",
+            "certificate_hash": "82e3e09078f271f4d63b20f2ddb90d843eb9f027"
+          }
+        },
+        {
+          "client_id": "106982393628-ite7cm858gprucf1qnbm6mobkeht497j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxi7lx50Ue-KTsHmP5OH9eEPjOMuTh9l0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106982393628-ite7cm858gprucf1qnbm6mobkeht497j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

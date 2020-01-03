@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TRADEAL</string>
+    <string name="EditProfile">Edit your user profile</string>
+    <string name="signOut">Sign Out</string>
+    <string name="Password">Password</string>
+    <string name="Email">Email</string>
+    <string name="SignIn">Sign In</string>
+    <string name="SignUp">Sign Up</string>
+    <string name="Username">Username</string>
+    <string name="Search">Search</string>
+    <string name="SearchHint">Search traDeal</string>
+    <string name="Welcome">Welcome,</string>
+    <string name="weakPassword">Password is too weak, try using something more complicated</string>
+    <string name="invalidEmail">Email is not valid</string>
+    <string name="emailUsed">This email is already in use</string>
+</resources>
