@@ -42,8 +42,6 @@ public class SignDialogFragment extends DialogFragment {
             switch (i){
                 case 0:
                     return new SignInFragment();
-                case 1:
-                    return new SignUpFragment();
                 default:
                     return new SignUpFragment();
             }

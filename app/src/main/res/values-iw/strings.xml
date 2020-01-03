@@ -11,4 +11,8 @@
     <string name="Search">חפש</string>
     <string name="SearchHint">חפש בטריידיל</string>
     <string name="Welcome">Welcome,</string>
+    <string name="description">Description</string>
+    <string name="add_listing">Add Listing</string>
+    <string name="title">כותרת</string>
+    <string name="addListing">הוסף מוצר</string>
 </resources>

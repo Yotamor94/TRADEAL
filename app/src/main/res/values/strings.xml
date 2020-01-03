@@ -13,4 +13,8 @@
     <string name="weakPassword">Password is too weak, try using something more complicated</string>
     <string name="invalidEmail">Email is not valid</string>
     <string name="emailUsed">This email is already in use</string>
+    <string name="description">Description</string>
+    <string name="add_listing">Add Listing</string>
+    <string name="title">Title</string>
+    <string name="addListing">Add Listing</string>
 </resources>
