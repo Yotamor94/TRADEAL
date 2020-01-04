@@ -24,7 +24,7 @@ public class ListingImageCellFragment extends Fragment {
     String imageUrl;
     ImageCellListener listener;
 
-    interface ImageCellListener{
+    public interface ImageCellListener{
         void deleteListingImage(String ImageUrl);
     }
 
@@ -32,11 +32,7 @@ public class ListingImageCellFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        try {
-            listener = (ImageCellListener)getContext();
-        }catch (ClassCastException ex){
-            throw new ClassCastException("the activity must implement imageCellListener");
-        }
+
     }
 
     public static ListingImageCellFragment newInstance(String imageUrl){

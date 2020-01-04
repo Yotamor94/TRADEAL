@@ -62,13 +62,4 @@
         android:layout_below="@+id/listingDescriptionTextInputLayout"
         android:layout_centerHorizontal="true"/>
 
-    <!--<ImageView
-        android:layout_width="350dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_burst_mode_black_24dp"
-        android:id=""-->
-
 </RelativeLayout>
