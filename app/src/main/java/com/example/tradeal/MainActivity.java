@@ -26,9 +26,12 @@ import android.os.Bundle;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     StorageReference storageReference;
     User user;
+    final int CAMERA_REQUEST_CODE = 1;
 
 
     @Override
@@ -74,6 +79,12 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    db.collection(USERS_DB_COLLECTION_NAME).document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            user = documentSnapshot.toObject(User.class);
+                        }
+                    });
                     Snackbar.make(coordinatorLayout, "Sign in successful", Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -135,10 +146,10 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
                 dialog.dismiss();
                 getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
                 Snackbar.make(coordinatorLayout, "Sign up successful", Snackbar.LENGTH_SHORT).show();
-                db.collection(USERS_DB_COLLECTION_NAME).add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                db.collection(USERS_DB_COLLECTION_NAME).document(user.getEmail()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Snackbar.make(coordinatorLayout, getString(R.string.Welcome) + user.getUsername(), Snackbar.LENGTH_SHORT).show();
+                    public void onSuccess(Void aVoid) {
+                        Snackbar.make(coordinatorLayout, getString(R.string.Welcome) + user.getUsername(), Snackbar.LENGTH_SHORT);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -146,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
                         Log.d("SignUpUser", "onFailure: exception:" + e.getMessage());
                     }
                 });
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -220,7 +232,24 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             }
         };
 
+        Button addListingBtn = findViewById(R.id.addListingFloatingBtn);
+        addListingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            }
+        });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
+            getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, null));
+        }
     }
 
     @Override

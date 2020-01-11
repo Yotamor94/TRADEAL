@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class AddListingFragment extends Fragment {
     private User user;
     ArrayList<String> imageUrls;
     pagerAdapter pagerAdapter;
+    AddListingEventListener listener;
 
     public static AddListingFragment newInstance(User user, ArrayList<String> imageUrls){
         Bundle bundle = new Bundle();
@@ -35,6 +37,17 @@ public class AddListingFragment extends Fragment {
         void addListingClicked(Listing listing);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        try{
+            listener = (AddListingEventListener)getContext();
+        }catch (ClassCastException e){
+            throw new ClassCastException("the activity must implement AddListingEventListener");
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,15 +57,24 @@ public class AddListingFragment extends Fragment {
         imageUrls = getArguments().getStringArrayList("imageUrls");
         user = (User)getArguments().getSerializable("user");
 
-        EditText TitleEt = view.findViewById(R.id.listingTitleEt);
-        EditText DescriptionEt = view.findViewById(R.id.ListingDescriptionEt);
+        final EditText TitleEt = view.findViewById(R.id.listingTitleEt);
+        final EditText DescriptionEt = view.findViewById(R.id.ListingDescriptionEt);
+
+        Button addListingBtn = view.findViewById(R.id.addListingBtn);
+
+        addListingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.addListingClicked(new Listing(imageUrls, TitleEt.getText().toString(), DescriptionEt.getText().toString(), null));
+            }
+        });
 
         ViewPager pager = view.findViewById(R.id.addListingImageViewPager);
 
         pagerAdapter = new pagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,imageUrls);
         pager.setAdapter(pagerAdapter);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     private class pagerAdapter extends FragmentStatePagerAdapter {

@@ -32,7 +32,7 @@ public class ListingImageCellFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
+        listener = ((AddListingFragment)getParentFragment()).imageCellListener;
     }
 
     public static ListingImageCellFragment newInstance(String imageUrl){
