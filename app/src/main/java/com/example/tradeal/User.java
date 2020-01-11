@@ -13,7 +13,7 @@ public class User implements Serializable {
 
     private String username, email;
     private String imageUrl;
-    private ArrayList<Listing> listings;
+    private int numOfListings = 0;
 
     public User(String username, String email, String imageUrl) {
         this.username = username;
@@ -40,15 +40,19 @@ public class User implements Serializable {
         return imageUrl;
     }
 
-    public void setImage(String imageUrl) {
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public ArrayList<Listing> getListings() {
-        return listings;
+    public int getNumOfListings() {
+        return numOfListings;
     }
 
-    public void addListing(Listing listing){
-        listings.add(listing);
+    public void setNumOfListings(int numOfListings) {
+        this.numOfListings = numOfListings;
     }
 }

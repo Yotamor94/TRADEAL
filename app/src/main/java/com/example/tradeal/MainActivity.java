@@ -15,6 +15,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -57,11 +58,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 
-public class MainActivity extends AppCompatActivity implements SignEventListener, UserDialogFragment.userDialogEventListener {
+public class MainActivity extends AppCompatActivity implements SignEventListener, UserDialogFragment.userDialogEventListener, AddListingFragment.AddListingEventListener {
 
-    final String USERS_DB_COLLECTION_NAME = "users";
+    final String USERS_DB_COLLECTION_NAME = "users", LISTINGS_DB_COLLECTION_NAME = "listings";
     CoordinatorLayout coordinatorLayout;
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
@@ -79,12 +83,6 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    db.collection(USERS_DB_COLLECTION_NAME).document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            user = documentSnapshot.toObject(User.class);
-                        }
-                    });
                     Snackbar.make(coordinatorLayout, "Sign in successful", Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -143,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                dialog.dismiss();
                 getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
                 Snackbar.make(coordinatorLayout, "Sign up successful", Snackbar.LENGTH_SHORT).show();
                 db.collection(USERS_DB_COLLECTION_NAME).document(user.getEmail()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Snackbar.make(coordinatorLayout, getString(R.string.Welcome) + user.getUsername(), Snackbar.LENGTH_SHORT);
+                        dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -162,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                dialog.dismiss();
                 if (e.getClass() == FirebaseAuthWeakPasswordException.class) {
                     Toast.makeText(MainActivity.this, getString(R.string.weakPassword), Toast.LENGTH_LONG).show();
                 } else if (e.getClass() == FirebaseAuthInvalidCredentialsException.class) {
@@ -186,6 +185,18 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
         firebaseAuth.signOut();
         user = null;
         getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("userDialog")).commit();
+    }
+
+    @Override
+    public void addListingClicked(Listing listing, final ProgressDialog dialog) {
+        db.collection(USERS_DB_COLLECTION_NAME).document(user.getEmail()).collection(LISTINGS_DB_COLLECTION_NAME).document(user.getNumOfListings() + "").set(listing).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                user.setNumOfListings(user.getNumOfListings() + 1);
+                dialog.dismiss();
+                //go to view Listing Page
+            }
+        });
     }
 
     @Override
@@ -232,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             }
         };
 
-        Button addListingBtn = findViewById(R.id.addListingFloatingBtn);
+        FloatingActionButton addListingBtn = findViewById(R.id.addListingFloatingBtn);
         addListingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,8 +258,12 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Bitmap image = (Bitmap)data.getExtras().get("data");
+        ArrayList<Bitmap> images = new ArrayList<>();
+        images.add(image);
+
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
-            getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, null));
+            getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, images)).commit();
         }
     }
 

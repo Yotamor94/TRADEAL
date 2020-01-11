@@ -1,6 +1,7 @@
 package com.example.tradeal;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,11 +22,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class ListingImageCellFragment extends Fragment {
-    String imageUrl;
+    Bitmap image;
     ImageCellListener listener;
 
     public interface ImageCellListener{
-        void deleteListingImage(String ImageUrl);
+        void deleteListingImage(Bitmap Image);
     }
 
     @Override
@@ -35,9 +36,9 @@ public class ListingImageCellFragment extends Fragment {
         listener = ((AddListingFragment)getParentFragment()).imageCellListener;
     }
 
-    public static ListingImageCellFragment newInstance(String imageUrl){
+    public static ListingImageCellFragment newInstance(Bitmap image){
         Bundle bundle = new Bundle();
-        bundle.putString("imageUrl", imageUrl);
+        bundle.putParcelable("image", image);
         ListingImageCellFragment fragment = new ListingImageCellFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -49,20 +50,20 @@ public class ListingImageCellFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_listing_image_cell, container, false);
 
-        Button deleteBtn = view.findViewById(R.id.deleteImageBtn);
+        ImageButton deleteBtn = view.findViewById(R.id.deleteImageBtn);
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.deleteListingImage(imageUrl);
+                listener.deleteListingImage(image);
             }
         });
 
-        ImageView imageView = view.findViewById(R.id.listingImage);
+        ImageView imageView = view.findViewById(R.id.ListingCellImageView);
 
-        imageUrl = getArguments().getString("imageUrl");
+        image = getArguments().getParcelable("image");
 
-        Glide.with(ListingImageCellFragment.this).load(imageUrl).into(imageView);
+        imageView.setImageBitmap(image);
 
         return view;
     }

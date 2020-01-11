@@ -48,11 +48,15 @@ public class Listing implements Serializable {
         this.user = user;
     }
 
-    public ArrayList<String> getImages() {
+    public void addImage(String... images){
+        this.imageUrls.addAll(Arrays.asList(images));
+    }
+
+    public ArrayList<String> getImageUrls() {
         return imageUrls;
     }
 
-    public void addImage(String... images){
-        this.imageUrls.addAll(Arrays.asList(images));
+    public void setImageUrls(ArrayList<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }
