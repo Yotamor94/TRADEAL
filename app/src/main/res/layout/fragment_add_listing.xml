@@ -18,7 +18,8 @@
         android:layout_alignBottom="@+id/addListingImageViewPager"
         android:layout_alignEnd="@+id/addListingImageViewPager"
         android:src="@drawable/ic_add_a_photo_black_24dp"
-        android:id="@+id/addPhotoToListingBtn"/>
+        android:id="@+id/addPhotoToListingBtn"
+        android:layout_margin="5dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="300dp"
@@ -36,11 +37,46 @@
             android:layout_margin="10dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/listingTitleTextInputLayout"
+        android:id="@+id/addListingCategoryLinearLayout"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/background_category_pop_up_menu">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_expand_more_black_24dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="10dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_category_black_24dp"
+            android:id="@+id/addListingCategoryImageView"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/category"
+            android:id="@+id/addListingCategoryNameTv"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/addListingCategoryLinearLayout"
         android:id="@+id/listingDescriptionTextInputLayout"
         android:layout_margin="10dp">
         <com.google.android.material.textfield.TextInputEditText

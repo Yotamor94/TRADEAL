@@ -13,12 +13,14 @@ public class Listing implements Serializable {
     private ArrayList<String> imageUrls;
     private String title, description;
     private User user;
+    private Category category;
 
-    public Listing(ArrayList<String> images, String title, String description, User user) {
+    public Listing(ArrayList<String> images, String title, String description, User user, Category category) {
         this.imageUrls = images;
         this.title = title;
         this.description = description;
         this.user = user;
+        this.category = category;
     }
 
     public Listing() {

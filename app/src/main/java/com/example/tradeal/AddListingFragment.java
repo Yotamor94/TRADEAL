@@ -100,7 +100,7 @@ public class AddListingFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             imageUrls.add(filePath.getDownloadUrl().toString());
                             if (pos == images.size() - 1){
-                                listener.addListingClicked(new Listing(imageUrls, TitleEt.getText().toString(), DescriptionEt.getText().toString(), user), progressDialog);
+                                listener.addListingClicked(new Listing(imageUrls, TitleEt.getText().toString(), DescriptionEt.getText().toString(), user, null), progressDialog);
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {

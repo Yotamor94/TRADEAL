@@ -15,4 +15,5 @@
     <string name="add_listing">Add Listing</string>
     <string name="title">כותרת</string>
     <string name="addListing">הוסף מוצר</string>
+    <string name="category">Category</string>
 </resources>

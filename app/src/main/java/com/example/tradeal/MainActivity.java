@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     StorageReference storageReference;
     User user;
+    FloatingActionButton addListingBtn;
     final int CAMERA_REQUEST_CODE = 1;
 
 
@@ -194,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             public void onSuccess(Void aVoid) {
                 user.setNumOfListings(user.getNumOfListings() + 1);
                 dialog.dismiss();
+                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("addListing"));
+                addListingBtn.setVisibility(View.VISIBLE);
                 //go to view Listing Page
             }
         });
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             }
         };
 
-        FloatingActionButton addListingBtn = findViewById(R.id.addListingFloatingBtn);
+        addListingBtn = findViewById(R.id.addListingFloatingBtn);
         addListingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,7 +266,8 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
         images.add(image);
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
-            getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, images)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, images), "addListing").addToBackStack(null).commit();
+            addListingBtn.setVisibility(View.INVISIBLE);
         }
     }
 
