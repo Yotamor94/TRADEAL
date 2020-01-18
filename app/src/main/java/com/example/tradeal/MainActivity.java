@@ -18,10 +18,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
@@ -73,18 +75,23 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
     StorageReference storageReference;
     User user;
     FloatingActionButton addListingBtn;
-    final int CAMERA_REQUEST_CODE = 1;
+    final static int CAMERA_REQUEST_CODE = 1;
 
 
     @Override
     public void onSignInClick(final String email, String password) {
-        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Please wait, creating your account");
+        dialog.setCancelable(false);
+        dialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Snackbar.make(coordinatorLayout, "Sign in successful", Snackbar.LENGTH_SHORT).show();
+                    getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
+                    dialog.dismiss();
                 } else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                         Snackbar.make(coordinatorLayout, "Wrong password", Snackbar.LENGTH_LONG);
@@ -100,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
 
     @Override
     public void onSignUpClick(final String Email, final String username, final String password, Bitmap image) {
-       // getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
+        // getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
 
         final StorageReference filePath = storageReference.child("users").child(username + ".jpg");
 
@@ -120,9 +127,15 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String imageUrl = filePath.getDownloadUrl().toString();
-                    user = new User(username, Email, imageUrl);
-                    createUser(password, dialog);
+                    filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String imageUrl = uri.toString();
+                            user = new User(username, Email.toLowerCase(), imageUrl);
+                            createUser(password, dialog);
+                        }
+                    });
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -130,30 +143,30 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
                     Log.d("uploadImage", "onFailure: " + e.toString());
                 }
             });
-        }else{
-            user = new User(username, Email, "");
+        } else {
+            user = new User(username, Email.toLowerCase(), "");
             createUser(password, dialog);
         }
 
 
     }
 
-    public void createUser(String password, final ProgressDialog dialog){
+    public void createUser(String password, final ProgressDialog dialog) {
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
                 Snackbar.make(coordinatorLayout, "Sign up successful", Snackbar.LENGTH_SHORT).show();
                 db.collection(USERS_DB_COLLECTION_NAME).document(user.getEmail()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Snackbar.make(coordinatorLayout, getString(R.string.Welcome) + user.getUsername(), Snackbar.LENGTH_SHORT);
+                        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("signDialog")).commit();
                         dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("SignUpUser", "onFailure: exception:" + e.getMessage());
+                        Log.d("SignUpUser", "exception:" + e.getMessage());
                     }
                 });
 
@@ -169,9 +182,9 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
                 } else if (e.getClass() == FirebaseAuthUserCollisionException.class) {
                     Toast.makeText(MainActivity.this, getString(R.string.emailUsed), Toast.LENGTH_LONG).show();
                 }
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                /*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 SignDialogFragment signDialogFragment = new SignDialogFragment();
-                signDialogFragment.show(ft, "signDialog");
+                signDialogFragment.show(ft, "signDialog");*/
             }
         });
     }
@@ -194,8 +207,9 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
             @Override
             public void onSuccess(Void aVoid) {
                 user.setNumOfListings(user.getNumOfListings() + 1);
+                db.collection(USERS_DB_COLLECTION_NAME).document(user.getEmail()).update("numOfListings", user.getNumOfListings());
                 dialog.dismiss();
-                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("addListing"));
+                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("addListing")).commit();
                 addListingBtn.setVisibility(View.VISIBLE);
                 //go to view Listing Page
             }
@@ -227,7 +241,26 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
-                db.collection(USERS_DB_COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                if (firebaseAuth.getCurrentUser() != null) {
+                    db.collection(USERS_DB_COLLECTION_NAME).document(firebaseAuth.getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            user = documentSnapshot.toObject(User.class);
+                            dialog.dismiss();
+                            supportInvalidateOptionsMenu();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("getUser", "onFailure: " + e.getMessage());
+                        }
+                    });
+                }
+                dialog.dismiss();
+                supportInvalidateOptionsMenu();
+
+
+                /*db.collection(USERS_DB_COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -236,13 +269,14 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
                                     user = null;
                                 } else if (documentSnapshot.getData().get("email").toString().toLowerCase().equals(firebaseAuth.getCurrentUser().getEmail())) {
                                     user = documentSnapshot.toObject(User.class);
+                                    getSupportActionBar().invalidateOptionsMenu();
                                 }
                             }
                         }
                         dialog.dismiss();
                     }
-                });
-                supportInvalidateOptionsMenu();
+                });*/
+
             }
         };
 
@@ -260,14 +294,16 @@ public class MainActivity extends AppCompatActivity implements SignEventListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            Fragment addListingFragment = getSupportFragmentManager().findFragmentByTag("addListing");
+            if (addListingFragment == null || !addListingFragment.isVisible()){
+                ArrayList<Bitmap> images = new ArrayList<>();
+                images.add(image);
+                getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, images), "addListing").addToBackStack(null).commit();
+                addListingBtn.setVisibility(View.INVISIBLE);
+            }
 
-        Bitmap image = (Bitmap)data.getExtras().get("data");
-        ArrayList<Bitmap> images = new ArrayList<>();
-        images.add(image);
-
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
-            getSupportFragmentManager().beginTransaction().replace(R.id.coordinatorMainLayout, AddListingFragment.newInstance(user, images), "addListing").addToBackStack(null).commit();
-            addListingBtn.setVisibility(View.INVISIBLE);
         }
     }
 

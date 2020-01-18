@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/category_sports"
+        android:title="Sports"
+        android:icon="@drawable/ic_run_black_24dp"/>
+
+    <item android:id="@+id/category_fashion"
+        android:title="Fashion"
+        android:icon="@drawable/ic_run_black_24dp"/>
+
+    <item android:id="@+id/category_garden"
+        android:title="Garden"/>
+
+    <item android:id="@+id/category_cars"
+        android:title="Cars"/>
+
+    <item android:id="@+id/category_electronics"
+        android:title="Electronics"/>
+
+    <item android:id="@+id/category_furniture"
+        android:title="Furniture"/>
+
+</menu>

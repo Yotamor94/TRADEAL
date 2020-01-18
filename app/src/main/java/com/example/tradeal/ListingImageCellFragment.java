@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,7 +28,7 @@ public class ListingImageCellFragment extends Fragment {
     Bitmap image;
     ImageCellListener listener;
 
-    public interface ImageCellListener{
+    public interface ImageCellListener extends Serializable {
         void deleteListingImage(Bitmap Image);
     }
 
@@ -33,12 +36,14 @@ public class ListingImageCellFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        listener = ((AddListingFragment)getParentFragment()).imageCellListener;
+        listener = (ImageCellListener)getArguments().getSerializable("listener");
+
     }
 
-    public static ListingImageCellFragment newInstance(Bitmap image){
+    public static ListingImageCellFragment newInstance(Bitmap image, ImageCellListener listener){
         Bundle bundle = new Bundle();
         bundle.putParcelable("image", image);
+        bundle.putSerializable("listener", listener);
         ListingImageCellFragment fragment = new ListingImageCellFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -61,7 +66,10 @@ public class ListingImageCellFragment extends Fragment {
 
         ImageView imageView = view.findViewById(R.id.ListingCellImageView);
 
-        image = getArguments().getParcelable("image");
+        if (getArguments().getParcelable("image") != null){
+            image = getArguments().getParcelable("image");
+        }
+
 
         imageView.setImageBitmap(image);
 

@@ -11,15 +11,14 @@ import java.util.Arrays;
 public class Listing implements Serializable {
 
     private ArrayList<String> imageUrls;
-    private String title, description;
-    private User user;
+    private String title, description, userEmail;
     private Category category;
 
-    public Listing(ArrayList<String> images, String title, String description, User user, Category category) {
+    public Listing(ArrayList<String> images, String title, String description, String userEmail, Category category) {
         this.imageUrls = images;
         this.title = title;
         this.description = description;
-        this.user = user;
+        this.userEmail = userEmail;
         this.category = category;
     }
 
@@ -42,12 +41,20 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void addImage(String... images){
