@@ -1,60 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivityLL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:id="@+id/coordinatorMainLayout">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorMainLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="10">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleEnabled="false">
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
 
-            <androidx.appcompat.widget.Toolbar
+<!--
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:id="@+id/mainActivityToolbar"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:layout_collapseMode="parallax"
-                android:layout_gravity="top"/>
+                android:layout_height="130dp"
+                app:layout_scrollFlags="scroll|snap"
+                app:titleEnabled="true"
+                app:title="@string/title">
+-->
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/mainActivityTabLayout"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/mainActivityToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="top"
+                    app:titleTextColor="@color/textColor_black"
+                    app:title="@string/app_name"
+                    app:layout_scrollFlags="scroll|enterAlways|snap" />
+<!--                    app:layout_collapseMode="parallax"-->
+
+
+<!--            </com.google.android.material.appbar.CollapsingToolbarLayout>-->
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+   <!--             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="bottom"
-                app:layout_collapseMode="pin"
-                app:tabGravity="fill"
-                app:tabMode="fixed" />
-            
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                android:layout_height="match_parent"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <LinearLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+        <!--
+                        </ScrollView>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/mainActivityPager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+                                <com.arlib.floatingsearchview.FloatingSearchView
+                                    android:id="@+id/floatingSearchBar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:floatingSearch_close_search_on_keyboard_dismiss="true"
+                                    app:floatingSearch_leftActionMode="showSearch"
+                                    app:floatingSearch_menu="@menu/options_menu"
+                                    app:floatingSearch_searchBarMarginLeft="4dp"
+                                    app:floatingSearch_searchBarMarginRight="4dp"
+                                    app:floatingSearch_searchBarMarginTop="4dp"
+                                    app:floatingSearch_searchHint="@string/SearchHint"
+                                    app:floatingSearch_showSearchKey="true"
+                                    app:floatingSearch_suggestionsListAnimDuration="250" />-->
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
+
+        <!--
+                         &lt;!&ndash;<com.google.android.material.tabs.TabLayout
+                             android:id="@+id/mainActivityTabLayout"
+                             android:layout_width="match_parent"
+                             android:layout_height="?attr/actionBarSize"
+                             android:layout_gravity="bottom"
+                             app:layout_collapseMode="pin"
+                             app:tabGravity="fill"
+                             app:tabMode="fixed" />&ndash;&gt;
+
+                     -->
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addListingFloatingBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="20dp"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:src="@drawable/ic_add_to_photos_black_24dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="1dp"
+            app:tint="@color/dark_grey_menus" />
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationMenu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="20dp"
-        android:background="@color/colorPrimary"
-        android:backgroundTint="@color/colorPrimary"
-        app:borderWidth="0dp"
-        android:src="@drawable/ic_add_to_photos_black_24dp"
-        android:id="@+id/addListingFloatingBtn"/>
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_navigation_menu" />
+    <!--        android:background="@color/colorPrimary"
+            app:itemBackground="@color/colorPrimary"-->
 
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

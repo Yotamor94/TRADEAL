@@ -23,6 +23,7 @@ public class SignDialogFragment extends DialogFragment {
 
         TabLayout tabLayout = view.findViewById(R.id.signDialogTabLayout);
         ViewPager viewPager = view.findViewById(R.id.signDialogPager);
+        tabLayout.bringToFront();
 
         PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(pagerAdapter);

@@ -7,10 +7,10 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_person_black_24dp"/>
 
-    <item
+<!--    <item
         android:id="@+id/searchView"
         android:title="@string/Search"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="always"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>-->
 </menu>

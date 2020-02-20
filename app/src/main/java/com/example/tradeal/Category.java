@@ -2,7 +2,9 @@ package com.example.tradeal;
 
 import android.graphics.Bitmap;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
 
     public static final String SPORTS = "Sports", FASHION = "Fashion", GARDEN = "Garden", CARS = "Cars", ELECTRONICS = "Electronics", FURNITURE = "Furniture";
 
@@ -39,6 +41,8 @@ public class Category {
     }
 
     public Category() {
+        this.name = "Not categorized";
+        this.imageId = R.drawable.baseline_category_black_24dp;
     }
 
     public String getName() {

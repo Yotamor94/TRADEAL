@@ -13,12 +13,19 @@ public class User implements Serializable {
 
     private String username, email;
     private String imageUrl;
-    private int numOfListings = 0;
+    private ArrayList<String> listingIds, favouriteIds;
+    ArrayList<String> usersConversedEmails;
+    ArrayList<String> deviceTokens;
+    boolean isGroupCreated;
 
     public User(String username, String email, String imageUrl) {
         this.username = username;
         this.email = email;
         this.imageUrl = imageUrl;
+        listingIds = new ArrayList<>();
+        favouriteIds = new ArrayList<>();
+        deviceTokens = new ArrayList<>();
+        isGroupCreated = false;
     }
 
     public User() {
@@ -48,11 +55,59 @@ public class User implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public int getNumOfListings() {
-        return numOfListings;
+    public ArrayList<String> getListingIds() {
+        return listingIds;
     }
 
-    public void setNumOfListings(int numOfListings) {
-        this.numOfListings = numOfListings;
+    public void setListingIds(ArrayList<String> listingIds) {
+        this.listingIds = listingIds;
+    }
+
+    public void addLisitngId(String id){
+        listingIds.add(id);
+    }
+
+    public ArrayList<String> getFavouriteIds() {
+        return favouriteIds;
+    }
+
+    public void addFavouriteId(String id){
+        favouriteIds.add(id);
+    }
+
+    public void setFavouriteIds(ArrayList<String> favouriteIds) {
+        this.favouriteIds = favouriteIds;
+    }
+
+    public ArrayList<String> getUsersConversedEmails() {
+        return usersConversedEmails;
+    }
+
+    public void setUsersConversedEmails(ArrayList<String> usersConversedEmails) {
+        this.usersConversedEmails = usersConversedEmails;
+    }
+
+    public void addUserConversed(String email){
+        usersConversedEmails.add(email);
+    }
+
+    public ArrayList<String> getDeviceTokens() {
+        return deviceTokens;
+    }
+
+    public void setDeviceTokens(ArrayList<String> deviceTokens) {
+        this.deviceTokens = deviceTokens;
+    }
+
+    public void addDeviceToken(String token){
+        deviceTokens.add(token);
+    }
+
+    public boolean isGroupCreated() {
+        return isGroupCreated;
+    }
+
+    public void setGroupCreated(boolean groupCreated) {
+        isGroupCreated = groupCreated;
     }
 }

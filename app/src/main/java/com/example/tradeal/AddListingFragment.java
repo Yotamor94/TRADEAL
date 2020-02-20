@@ -1,6 +1,8 @@
 package com.example.tradeal;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -44,12 +46,15 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddListingFragment extends Fragment {
 
+    final int CAMERA_REQUEST_CODE = 2;
     private User user;
-    private static int imageId = 0;
-    ArrayList<Bitmap> images;
+    private int imageId = 0;
     pagerAdapter pagerAdapter;
     AddListingEventListener listener;
+    ArrayList<Bitmap> images;
     ViewPager pager;
+    ImageView[] dots;
+    LinearLayout dotsLL;
 
     public static AddListingFragment newInstance(User user, ArrayList<Bitmap> images){
         Bundle bundle = new Bundle();
@@ -79,9 +84,23 @@ public class AddListingFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == MainActivity.CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             Bitmap image = (Bitmap) data.getExtras().get("data");
             images.add(image);
+            dotsLL.removeAllViews();
+            dots = new ImageView[images.size()];
+            for (int i = 0; i < dots.length; i++){
+
+                dots[i] = new ImageView(getContext());
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_not_selected_24dp));
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                params.setMargins(8, 0, 8, 0);
+
+                dotsLL.addView(dots[i], params);
+            }
+            dots[pager.getCurrentItem()].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_selected_black_24dp));
             pager.setAdapter(new pagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, images));
         }
     }
@@ -137,7 +156,7 @@ public class AddListingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, MainActivity.CAMERA_REQUEST_CODE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
         });
 
@@ -198,12 +217,46 @@ public class AddListingFragment extends Fragment {
         pagerAdapter = new pagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,images);
         pager.setAdapter(pagerAdapter);
 
+        dotsLL = view.findViewById(R.id.addListingDotsLL);
+        dots = new ImageView[images.size()];
+        for (int i = 0; i < dots.length; i++){
+
+            dots[i] = new ImageView(getContext());
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_not_selected_24dp));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            params.setMargins(8, 0, 8, 0);
+
+            dotsLL.addView(dots[i], params);
+        }
+        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_selected_black_24dp));
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < dots.length; i++){
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_not_selected_24dp));
+                }
+                dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_selected_black_24dp));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         return view;
     }
 
 
 
-    private class pagerAdapter extends FragmentStatePagerAdapter implements Serializable {
+    private class pagerAdapter extends FragmentStatePagerAdapter {
 
         ArrayList<Bitmap> images;
 
@@ -218,11 +271,39 @@ public class AddListingFragment extends Fragment {
             ListingImageCellFragment.ImageCellListener imageCellListener = new ListingImageCellFragment.ImageCellListener() {
             @Override
             public void deleteListingImage(Bitmap Image) {
-                images.remove(Image);
-                pager.setAdapter(new pagerAdapter(getChildFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, images));
+                if (images.size() == 1){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("A listing must have at least one image, please add more images to delete this one").setNeutralButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+                }
+                else {
+                    images.remove(Image);
+                    dotsLL.removeAllViews();
+                    dots = new ImageView[images.size()];
+                    for (int i = 0; i < dots.length; i++) {
+
+                        dots[i] = new ImageView(getContext());
+                        dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_not_selected_24dp));
+
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                        params.setMargins(8, 0, 8, 0);
+
+                        dotsLL.addView(dots[i], params);
+                    }
+                    pager.setAdapter(new pagerAdapter(getChildFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, images));
+                    dots[pager.getCurrentItem()].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_selected_black_24dp));
+
+                }
             }
         };
-            return ListingImageCellFragment.newInstance(images.get(position), imageCellListener);
+            ListingImageCellFragment fragment = ListingImageCellFragment.newInstance(images.get(position));
+            fragment.setListener(imageCellListener);
+            return fragment;
         }
 
         @Override

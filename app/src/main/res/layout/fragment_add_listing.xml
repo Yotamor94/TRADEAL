@@ -1,103 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:id="@+id/addListingFragmentLayout">
+    android:overScrollMode="always">
 
-    <androidx.viewpager.widget.ViewPager
-        android:layout_width="350dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-        android:id="@+id/addListingImageViewPager"/>
+    <RelativeLayout
+        android:id="@+id/addListingFragmentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/addListingImageViewPager"
-        android:layout_alignEnd="@+id/addListingImageViewPager"
-        android:src="@drawable/ic_add_a_photo_black_24dp"
-        android:id="@+id/addPhotoToListingBtn"
-        android:layout_margin="5dp"/>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/addListingImageViewPager"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/addListingImageViewPager"
-        android:id="@+id/listingTitleTextInputLayout">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/title"
-            android:id="@+id/listingTitleEt"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_margin="10dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/listingTitleTextInputLayout"
-        android:id="@+id/addListingCategoryLinearLayout"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/background_category_pop_up_menu">
-
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_expand_more_black_24dp"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="10dp"/>
+            android:layout_below="@+id/addListingImageViewPager"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:id="@+id/addListingDotsLL"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_marginBottom="10dp"/>
 
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addPhotoToListingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_category_black_24dp"
-            android:id="@+id/addListingCategoryImageView"
-            android:layout_margin="10dp"/>
+            android:layout_alignEnd="@+id/addListingImageViewPager"
+            android:layout_alignBottom="@+id/addListingImageViewPager"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_add_a_photo_black_24dp" />
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/listingTitleTextInputLayout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addListingDotsLL"
+            android:layout_centerHorizontal="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/listingTitleEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="@string/title"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/addListingCategoryLinearLayout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listingTitleTextInputLayout"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/background_category_pop_up_menu"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_expand_more_black_24dp" />
+
+            <ImageView
+                android:id="@+id/addListingCategoryImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/baseline_category_black_24dp" />
+
+            <TextView
+                android:id="@+id/addListingCategoryNameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/category"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/listingDescriptionTextInputLayout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addListingCategoryLinearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ListingDescriptionEt"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:fadeScrollbars="true"
+                android:hint="@string/description"
+                android:overScrollMode="ifContentScrolls"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/addListingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="@string/category"
-            android:id="@+id/addListingCategoryNameTv"
-            android:layout_margin="10dp"/>
+            android:layout_below="@+id/listingDescriptionTextInputLayout"
+            android:layout_centerHorizontal="true"
+            android:text="@string/add_listing" />
 
-    </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/addListingCategoryLinearLayout"
-        android:id="@+id/listingDescriptionTextInputLayout"
-        android:layout_margin="10dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:fadeScrollbars="true"
-            android:overScrollMode="ifContentScrolls"
-            android:hint="@string/description"
-            android:id="@+id/ListingDescriptionEt"
-            android:textSize="16sp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cornerRadius="20dp"
-        android:text="@string/add_listing"
-        android:id="@+id/addListingBtn"
-        android:layout_below="@+id/listingDescriptionTextInputLayout"
-        android:layout_centerHorizontal="true"/>
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

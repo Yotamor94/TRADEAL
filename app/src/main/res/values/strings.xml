@@ -18,4 +18,11 @@
     <string name="title">Title</string>
     <string name="addListing">Add Listing</string>
     <string name="category">Category</string>
+    <string name="home">Home</string>
+    <string name="my_area">My Area</string>
+    <string name="favourites">Favourites</string>
+    <string name="messages">Messages</string>
+    <string name="message_seller">Message Seller</string>
+    <string name="ConfirmEdit">Confirm edit</string>
+    <string name="delete_conversation">Delete conversation</string>
 </resources>

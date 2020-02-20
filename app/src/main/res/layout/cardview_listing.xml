@@ -10,8 +10,23 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:id="@+id/listingImage"
         android:scaleType="centerCrop"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_favorite_border_black_24dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/recyclerViewFavouriteBtn" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_black_24dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/recyclerViewDeleteBtn"
+        android:visibility="gone"/>
 
 </androidx.cardview.widget.CardView>

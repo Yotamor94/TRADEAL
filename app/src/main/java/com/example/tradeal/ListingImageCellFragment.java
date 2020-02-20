@@ -28,22 +28,17 @@ public class ListingImageCellFragment extends Fragment {
     Bitmap image;
     ImageCellListener listener;
 
-    public interface ImageCellListener extends Serializable {
+    public interface ImageCellListener {
         void deleteListingImage(Bitmap Image);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        listener = (ImageCellListener)getArguments().getSerializable("listener");
-
+    public void setListener(ImageCellListener listener){
+        this.listener = listener;
     }
 
-    public static ListingImageCellFragment newInstance(Bitmap image, ImageCellListener listener){
+    public static ListingImageCellFragment newInstance(Bitmap image){
         Bundle bundle = new Bundle();
         bundle.putParcelable("image", image);
-        bundle.putSerializable("listener", listener);
         ListingImageCellFragment fragment = new ListingImageCellFragment();
         fragment.setArguments(bundle);
         return fragment;

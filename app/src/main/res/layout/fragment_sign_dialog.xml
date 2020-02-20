@@ -15,7 +15,8 @@
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            android:background="@color/colorPrimary"
+            android:background="@android:color/white"
+            app:tabSelectedTextColor="@color/colorPrimary"
             android:id="@+id/signDialogTabLayout"/>
 
         <androidx.viewpager.widget.ViewPager

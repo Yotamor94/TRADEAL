@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class Listing implements Serializable {
 
     private ArrayList<String> imageUrls;
-    private String title, description, userEmail;
+    private String title, description, userEmail, id;
     private Category category;
 
     public Listing(ArrayList<String> images, String title, String description, String userEmail, Category category) {
@@ -20,6 +20,14 @@ public class Listing implements Serializable {
         this.description = description;
         this.userEmail = userEmail;
         this.category = category;
+    }
+
+    public Listing(Listing listing){
+        this.imageUrls = listing.getImageUrls();
+        this.title = listing.getTitle();
+        this.description = listing.getDescription();
+        this.userEmail = listing.getUserEmail();
+        this.category = listing.getCategory();
     }
 
     public Listing() {
@@ -67,5 +75,13 @@ public class Listing implements Serializable {
 
     public void setImageUrls(ArrayList<String> imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -3,7 +3,9 @@ package com.example.tradeal;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
+
+import java.io.File;
+
 import static android.app.Activity.RESULT_OK;
 
 public class SignUpFragment extends Fragment {
@@ -22,7 +29,7 @@ public class SignUpFragment extends Fragment {
     SignEventListener listener;
     final int CAMERA_REQUEST_CODE = 1;
     ImageButton userPictureBtn;
-    Bitmap lastPicture = null;
+    Uri lastPictureUri = null;
 
     @Override
     public void onAttach(Context context) {
@@ -49,29 +56,38 @@ public class SignUpFragment extends Fragment {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onSignUpClick(emailEt.getText().toString(), usernameEt.getText().toString(), passwordEt.getText().toString(), lastPicture);
+                if (usernameEt.getText().toString().equals(""))
+                    usernameEt.setError("Can't be blank");
+                if (passwordEt.getText().length() < 6)
+                    passwordEt.setError("Password must be at least six characters");
+                if (!usernameEt.getText().toString().equals("") && passwordEt.getText().length() >= 6)
+                    listener.onSignUpClick(emailEt.getText().toString(), usernameEt.getText().toString(), passwordEt.getText().toString(), lastPictureUri);
             }
         });
 
         userPictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                uri = Utils.getImageUri(getActivity());
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
         });
 
         return view;
     }
-
+    Uri uri;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
-            Bitmap userPicture = (Bitmap)data.getExtras().get("data");
+            userPictureBtn.setImageURI(uri);
+            lastPictureUri = uri;
+           /* Bitmap userPicture = (Bitmap)data.getExtras().get("data");
             userPictureBtn.setImageBitmap(userPicture);
-            lastPicture = userPicture;
+            lastPicture = userPicture;*/
         }
     }
 }
